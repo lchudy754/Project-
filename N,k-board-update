@@ -1,0 +1,69 @@
+# Function to check for a win
+def check_win(board, player, k):
+    size = len(board)
+
+    # Check rows and columns
+    for i in range(size):
+        for j in range(size - k + 1):
+            if all(board[i][j + x] == player for x in range(k)):  # Check row
+                return True
+            if all(board[j + x][i] == player for x in range(k)):  # Check column
+                return True
+
+    # Check diagonals
+    for i in range(size - k + 1):
+        for j in range(size - k + 1):
+            if all(board[i + x][j + x] == player for x in range(k)):  # Main diagonal
+                return True
+            if all(board[i + x][j + k - 1 - x] == player for x in range(k)):  # Anti-diagonal
+                return True
+
+    return False
+
+# Function to play the game
+def play_game():
+    while True:
+        try:
+            n = int(input("Enter the board size (N): "))
+            k = int(input("Enter the winning condition (k in a row): "))
+            if n >= k > 1:
+                break
+            else:
+                print("Invalid input. Ensure N >= k > 1.")
+        except ValueError:
+            print("Invalid input. Please enter valid integers.")
+    
+    board = [[" " for _ in range(n)] for _ in range(n)]
+    current_player = "X"
+    
+    while True:
+        print_board(board)
+        
+        while True:
+            try:
+                row = int(input(f"Player {current_player}, enter the row (0-{n-1}): "))
+                col = int(input(f"Player {current_player}, enter the column (0-{n-1}): "))
+                if 0 <= row < n and 0 <= col < n:
+                    if board[row][col] == " ":
+                        break
+                    else:
+                        print("That spot is already taken. Try again.")
+                else:
+                    print(f"Invalid input. Please enter numbers between 0 and {n-1}.")
+            except ValueError:
+                print("Invalid input. Please enter valid integers.")
+        
+        board[row][col] = current_player
+
+        # Check for a win before checking for a draw
+        if check_win(board, current_player, k):
+            print_board(board)
+            print(f"Player {current_player} wins!")
+            break
+
+        if check_draw(board):
+            print_board(board)
+            print("It's a draw!")
+            break
+
+        current_player = "O" if current_player == "X" else "X"
