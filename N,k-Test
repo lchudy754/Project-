@@ -1,0 +1,62 @@
+def test_check_win():
+    def print_result(test_case, result, expected):
+        status = "PASS" if result == expected else "FAIL"
+        print(f"Test {test_case}: {status} (Got: {result}, Expected: {expected})")
+
+    # Test 1: Horizontal win
+    board1 = [
+        ["X", "X", "X"],
+        ["O", " ", " "],
+        [" ", " ", "O"],
+    ]
+    print_result("1 (Horizontal win)", check_win(board1, "X", 3), True)
+
+    # Test 2: Vertical win
+    board2 = [
+        ["X", "O", " "],
+        ["X", "O", " "],
+        ["X", " ", " "],
+    ]
+    print_result("2 (Vertical win)", check_win(board2, "X", 3), True)
+
+    # Test 3: Diagonal win
+    board3 = [
+        ["X", "O", "O"],
+        ["O", "X", " "],
+        [" ", "O", "X"],
+    ]
+    print_result("3 (Diagonal win)", check_win(board3, "X", 3), True)
+
+    # Test 4: Anti-diagonal win
+    board4 = [
+        ["O", "O", "X"],
+        ["O", "X", " "],
+        ["X", " ", " "],
+    ]
+    print_result("4 (Anti-diagonal win)", check_win(board4, "X", 3), True)
+
+    # Test 5: No win
+    board5 = [
+        ["X", "O", "O"],
+        ["O", "X", " "],
+        ["O", " ", " "],
+    ]
+    print_result("5 (No win)", check_win(board5, "X", 3), False)
+
+    # Test 6: Smaller board with a win
+    board6 = [
+        ["X", "X"],
+        ["X", "O"],
+    ]
+    print_result("6 (Small board win)", check_win(board6, "X", 2), True)
+
+    # Test 7: Larger board with no win
+    board7 = [
+        ["X", "O", "O", " "],
+        ["O", "X", " ", " "],
+        [" ", " ", "O", " "],
+        [" ", " ", " ", "X"],
+    ]
+    print_result("7 (Large board no win)", check_win(board7, "X", 3), False)
+
+test_check_win()
