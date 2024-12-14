@@ -1,0 +1,79 @@
+import unittest
+import random
+
+# Assuming the functions are in a file called FINAL.py
+from FINAL.py import check_win, check_draw, reset_board, computer_turn
+
+class TestTicTacToe(unittest.TestCase):
+
+    def test_check_win(self):
+        # Test horizontal win
+        board = [["X", "X", "X", " ", " "],
+                 [" ", " ", " ", " ", " "],
+                 [" ", " ", " ", " ", " "],
+                 [" ", " ", " ", " ", " "],
+                 [" ", " ", " ", " ", " "]]
+        self.assertTrue(check_win(board, "X"), "Horizontal win not detected")
+
+        # Test vertical win
+        board = [["X", " ", " ", " ", " "],
+                 ["X", " ", " ", " ", " "],
+                 ["X", " ", " ", " ", " "],
+                 [" ", " ", " ", " ", " "],
+                 [" ", " ", " ", " ", " "]]
+        self.assertTrue(check_win(board, "X"), "Vertical win not detected")
+
+        # Test diagonal win
+        board = [["X", " ", " ", " ", " "],
+                 [" ", "X", " ", " ", " "],
+                 [" ", " ", "X", " ", " "],
+                 [" ", " ", " ", " ", " "],
+                 [" ", " ", " ", " ", " "]]
+        self.assertTrue(check_win(board, "X"), "Diagonal win not detected")
+
+    def test_check_draw(self):
+        # Test draw (board full with no winner)
+        board = [["X", "O", "X", "O", "X"],
+                 ["O", "X", "O", "X", "O"],
+                 ["X", "O", "X", "O", "X"],
+                 ["O", "X", "O", "X", "O"],
+                 ["X", "O", "X", "O", "X"]]
+        self.assertTrue(check_draw(board), "Draw condition not detected")
+
+        # Test no draw (empty spots exist)
+        board = [["X", "O", "X", "O", "X"],
+                 ["O", "X", "O", "X", " "],
+                 ["X", "O", "X", "O", "X"],
+                 ["O", "X", "O", "X", "O"],
+                 ["X", "O", "X", "O", "X"]]
+        self.assertFalse(check_draw(board), "Draw condition incorrectly detected")
+
+    def test_reset_board(self):
+        # Simulate a non-empty board
+        global board  # To simulate the board reset globally as in the original code
+        board = [["X", "O", "X", "O", "X"],
+                 ["O", "X", "O", "X", "O"],
+                 ["X", "O", "X", "O", "X"],
+                 ["O", "X", "O", "X", "O"],
+                 ["X", "O", "X", "O", "X"]]
+        reset_board()  # Reset the board
+        self.assertEqual(board, [[" " for _ in range(5)] for _ in range(5)], "Board not reset correctly")
+
+    def test_computer_turn(self):
+        # Simulate a simple game state where the computer has one move left
+        global board  # To simulate the board globally
+        board = [["X", "O", " ", " ", "X"],
+                 ["O", "X", "X", "O", " "],
+                 [" ", " ", " ", "X", "O"],
+                 ["O", " ", "O", "X", "X"],
+                 ["X", "X", "O", "O", " "]]
+        empty_cells_before = sum(1 for row in board for col in row if col == " ")
+        
+        # Simulate computer's turn
+        computer_turn()
+
+        empty_cells_after = sum(1 for row in board for col in row if col == " ")
+        self.assertEqual(empty_cells_after, empty_cells_before - 1, "Computer did not make a valid move")
+
+if __name__ == "__main__":
+    unittest.main()
